@@ -14,18 +14,16 @@ game.onevent(defines.events.ontick, function(event)
 end)
 
 -- Gui
-local guiNames =
-{
-	["tankButton"] = showTankConfig,
-	["tankConfigApply"] = hideTankConfig
-}
 
 game.onevent(defines.events.onguiclick, function(event)
 	local player = game.players[event.element.playerindex]
 	player.print(event.element.name)
 -- todo fix this
-	if guiNames[event.element.name] ~= nil then
-		guiNames[event.element.name](event)
+	if event.element.name == "tankButton" then
+		showTankConfig(event)
+	end
+	if event.element.name == "tankConfigApply" then
+		applyTankConfig(event)
 	end
 end)
 
@@ -52,13 +50,18 @@ function showTankConfig(event)
 	if frame ~= nil then
 	else
 		player.gui.center.add{type="frame", name="tankConfig", caption="Modular Tank Config", direction="vertical"}
+		frame = player.gui.center.tankConfig
+		
+		
 		frame.add{type="button", name="tankConfigApply", caption="Apply"}
 	end
 
 end
 
-function hideTankConfig(event)
+function applyTankConfig(event)
+	local player = game.players[event.element.playerindex]
 	if player.gui.center.tankConfig then
 		player.gui.center.tankConfig.destroy()
 	end
 end
+
